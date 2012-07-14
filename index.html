@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- http-equiv asks http protocol to add whatever in content in its http header field -->
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <link type="text/css" href="styles/mainpage.css" rel="stylesheet"></link>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="scripts/gmap.js"></script>
+    <script type="text/javascript" src="scripts/gplace.js"></script>
+    <script type="text/javascript" src="scripts/gdirect.js"></script>
+    <script type="text/javascript">
+      function initialize() {
+        var latlng = new google.maps.LatLng(-34.397, 150.644);
+        var myOptions = {
+          zoom: 16,
+          center: latlng,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("mapplace"),myOptions);
+	      Hodala.GMapHelper.setCenter("Cupertino, CA", map);
+	      Hodala.onApplicationLoad(map);
+        /* When user clicks the map, generate a new marker!
+         */
+        google.maps.event.addListener(map, 'click', function(event) {
+          var marker = Hodala.GMapHelper.setMarker(map, event.latLng);
+          Hodala.createPlaceGroup(marker);
+        });
+        //FunnyGraph();
+        //CircleLatLng(map, "Cupertino, CA");
+      }
+    </script>
+  </head>
+  <body onload=initialize()>
+    <header id="headline">
+      <navigation id="navigation" style="">
+	    The Map that locates place of interests near the route
+      <navigation>
+
+      <form id="search_and_mark" action="http://www.google.com/search" method="GET" name="searchbox">
+        <input class="intextfield" type="search" placeholder="Address, Places...etc">
+        <input type="submit" value="search place and put marker">
+      </form>
+      {{ greetings }}
+    </header>
+    <section id="main_body">
+      <div id="mapplace"> </div>
+      <div id="control_area">
+        <button class="control_item" id="route_button" onclick="getDirections2(Hodala.map);">Route</button>
+      </div>
+      <ul id="marker_element" style="padding-left: 0px; overflow: auto;">
+      <!-- Place where draggables in   -->
+      </ul>
+    </section>
+    <footer>
+      <div id="footline">
+      </div>
+    </footer>
+  </body>
+</html>
+

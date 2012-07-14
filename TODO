@@ -1,0 +1,11 @@
+2012-06-11,12
+1. Update marker places when user start the application, login.
+   or under some specific event
+2. Be able to remove the marker information in Google's data store
+3. Be able to add the marker information when user create a marker
+4. Have to think about what does this application like to achieve?
+Side: read https://developers.google.com/appengine/docs/python/datastore/
+	O(1) for read searching through database
+	Indexing cause some SQL ops not do-able
+	Same entity can have different properties
+

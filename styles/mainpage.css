@@ -1,0 +1,124 @@
+/* ID css */
+#search_and_mark {
+  top: 1px;
+}
+
+#main_body {
+  position: relative;
+}
+
+#mapplace {
+  height: 440px;
+  width: 500px;
+  margin-right: 90;
+}
+
+#control_area {
+  position: absolute;
+  top: 5px;
+  left: 510px;
+}
+.control_item {
+  float: left;
+  /*
+  background-color: #EEEEFF;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  */
+  margin-right: 5px;
+  text-align: center;
+  font-family: Arial,sans-serif;
+  font: 12pt consolas;
+  padding: 1px 1px 1px 1px;
+  width: 60px;
+  height: 27px;
+}
+
+#login {
+  width: 280px;
+}
+
+#login div span {
+  width: 100px;
+  float: left;
+  text-align: right;
+}
+
+/* element style */
+div.center {
+  text-align: center;
+}
+
+
+/* Draggable element style */
+
+li.drag-element {
+	position: relative;
+  list-style-type: none;
+  width: 40px;
+  height: 40px;
+  float: left;
+  overflow: hidden;
+  background-color: #EEEEFF;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  text-align: center;
+  font-family: Arial,sans-serif;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-right: 5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  font: 9pt consolas;
+}
+
+.drag-element:hover {
+    cursor: move;
+}
+
+/* select all elements with draggable attribute!
+ */
+[draggable] {
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-user-select: none;
+}
+
+.drag-element.over {
+	border: 2px dashed #000;
+}
+
+/** For testing purposes
+ */
+#testing ul {
+  font: 12pt consolas;
+  border: 1px solid #000000;
+  margin: 5px 5px 5px 5px;
+  padding: 5px 5px 5px 5px;
+  border-radius: 8px;
+  float: left;
+  width: 200px;
+  height: 20px;
+  background-color: #EFEFEF;
+}
+
+/** 
+ * For square funny graph
+ */
+.funny-graph {
+  border: 1px solid #000000;
+  height: 10px;
+  width: 10px;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  float: left;
+}
+.funny-square {
+  border: 1px solid #000000;
+  height: 10px;
+  width: 10px;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  float: left;
+}
