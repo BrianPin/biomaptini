@@ -12,7 +12,7 @@
       function initialize() {
         var latlng = new google.maps.LatLng(-34.397, 150.644);
         var myOptions = {
-          zoom: 16,
+          zoom: 14,
           center: latlng,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
@@ -25,31 +25,23 @@
           var marker = Hodala.GMapHelper.setMarker(map, event.latLng);
           Hodala.createPlaceGroup(marker);
         });
-        //FunnyGraph();
-        //CircleLatLng(map, "Cupertino, CA");
       }
     </script>
   </head>
   <body onload=initialize()>
     <header id="headline">
-      <navigation id="navigation" style="">
-	    The Map that locates place of interests near the route
-      <navigation>
-
-      <form id="search_and_mark" action="http://www.google.com/search" method="GET" name="searchbox">
-        <input class="intextfield" type="search" placeholder="Address, Places...etc">
-        <input type="submit" value="search place and put marker">
-      </form>
       {{ greetings }}
     </header>
     <section id="main_body">
       <div id="mapplace"> </div>
       <div id="control_area">
-        <button class="control_item" id="route_button" onclick="getDirections2(Hodala.map);">Route</button>
+        <button class="control_item" id="route_button" onclick="getDirections2(Hodala.map);">route</button>
+        <button class="control_item" id="clear_route" onclick="cleanRoute(Hodala.map);">de-route</button>
+        <button class="control_item" id="clear_marker" onclick="clearMarker(Hodala.map);">remove all</button>
       </div>
-      <ul id="marker_element" style="padding-left: 0px; overflow: auto;">
-      <!-- Place where draggables in   -->
-      </ul>
+      <div id="marker_area" style="padding-left: 0px; overflow: auto;">
+        <!-- Place where draggables in   -->
+      </div>
     </section>
     <footer>
       <div id="footline">

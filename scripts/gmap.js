@@ -31,7 +31,7 @@ var Hodala = {
 
 	// Use google map marker to bind to a place group
 	createPlaceGroup : function(marker, map) {
-		if (Hodala.places.length > 8) {
+		if (Hodala.places.length >= 8) {
 			console.log("Maximum waypoint exceeded");
 			marker.setMap(null);
 			return;
@@ -152,7 +152,7 @@ _PlaceGroup.prototype = {
 
 	// Create DOM element and bind it with the marker
 	setup : function() {
-		var labelHolder = document.getElementById('marker_element');
+		var labelHolder = document.getElementById('marker_area');
 		if (labelHolder == null) {
 			console.log("No div called marker_element");
 			return;
