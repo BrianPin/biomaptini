@@ -5,6 +5,7 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <link type="text/css" href="styles/mainpage.css" rel="stylesheet"></link>
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
     <script type="text/javascript" src="scripts/gmap.js"></script>
     <script type="text/javascript" src="scripts/gplace.js"></script>
     <script type="text/javascript" src="scripts/gdirect.js"></script>
@@ -35,9 +36,19 @@
     <section id="main_body">
       <div id="mapplace"> </div>
       <div id="control_area">
-        <button class="control_item" id="route_button" onclick="getDirections2(Hodala.map);">route</button>
+        <button class="control_item" id="route_button" onclick="getDirections(Hodala.map);">route</button>
         <button class="control_item" id="clear_route" onclick="cleanRoute(Hodala.map);">de-route</button>
         <button class="control_item" id="clear_marker" onclick="clearMarker(Hodala.map);">remove all</button>
+        <select class="control_item" style="font-size: 18px" id="poi_type" onchange="setSelectedType()">
+          <option>cafe</option>
+          <option>atm</option>
+          <option>bank</option>
+          <option>bus_station</option>
+          <option>airport</option>
+          <option>car_repair</option>
+          <option>food</option>
+          <option>gym</option>
+        </select>
       </div>
       <div id="marker_area" style="padding-left: 0px; overflow: auto;">
         <!-- Place where draggables in   -->

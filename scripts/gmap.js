@@ -1,5 +1,6 @@
 // This global object is used to handle the out most functionality or event
 var Hodala = {
+	poiType: "cafe",
 	// Google map object
 	map: undefined,
 
@@ -68,10 +69,7 @@ var Hodala = {
 					for (var i = 0; i < retObjs.length; i++) {
 						var p = retObjs[i];
 						if (p.latitude && p.longitude) {
-							var latlng = new google.maps.LatLng(
-								parseFloat(p.latitude), parseFloat(p.longitude));
-							console.log(p.latitude);
-							console.log(p.longitude);
+							var latlng = new google.maps.LatLng(parseFloat(p.latitude), parseFloat(p.longitude));
 
 							if (minLat > parseFloat(p.latitude))
 								minLat = parseFloat(p.latitude);
@@ -92,20 +90,22 @@ var Hodala = {
 							Hodala.createPlaceGroup(marker, mapObj);
 						}
 					}
-					if (count > 0) {
+					if (count > 1) {
 						var swLatLng = new google.maps.LatLng(minLat, minLng);
-						console.log("sw: " + swLatLng);
 						var neLatLng = new google.maps.LatLng(maxLat, maxLng);
-						console.log("ne: " + neLatLng);
 						var bounds = new google.maps.LatLngBounds(swLatLng, neLatLng);
 						mapObj.fitBounds(bounds);
 					}
+
+					if (count == 1) {
+						//mapObj.setCenter(new google.maps.LatLng({lat: retObjs[0].latitude, lng: retObjs[0].longitude}));
+						mapObj.setZoom(14);
+					}
+					//mapObj.setZoom(14);
 				}
 			}
         };
         req.send(null);
-        //var routeButton = document.getElementById('route_button');
-        //routeButton.addEventListener('click', getDirections(mapObj), false);
 	},
 
 	GMapHelper : {
@@ -115,7 +115,6 @@ var Hodala = {
 				if (status == google.maps.GeocoderStatus.OK) {
 					mapObject.setCenter(results[0].geometry.location);
 				}
-				console.log("BM setCenter: " + status.toString());
 			});
 		},
 
@@ -194,7 +193,7 @@ _PlaceGroup.prototype = {
 		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		request.onreadystatechange = function () {
 			if (request.readyState === 4 && request.status == 200) {
-				console.log("Sent " + Hodala.encodedFormData(data));
+//				console.log("Sent " + Hodala.encodedFormData(data));
 			}
 		};
 		request.send(Hodala.encodedFormData(data));

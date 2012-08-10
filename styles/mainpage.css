@@ -37,10 +37,12 @@
   border-radius: 4px;
   margin-right: 5px;
   text-align: center;
-  font-family: Arial,sans-serif;
-  font: Monaco 12pt;
+  vertical-align: center;
+  font-family: Monaco, Arial,sans-serif;
+  font-size: 14px;
+  margin-top: 5px;
   padding: 1px 1px 1px 1px;
-  width: 100px;
+  width: 110px;
   height: 40px;
 }
 

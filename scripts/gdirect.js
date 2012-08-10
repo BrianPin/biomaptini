@@ -5,6 +5,8 @@ function logHodalaTravelAgent (gmapDirectionResult) {
 		var route = gmapDirectionResult.routes[i];
 		for (var j = 0; j < route.legs.length; ++j) {
 			var leg = route.legs[j];
+			Hodala.GMapHelper.setMarker(Hodala.map, leg.start_location);
+			Hodala.GMapHelper.setMarker(Hodala.map, leg.end_location);
 			console.log('  Leg ' + (j+1));
 			console.log('  arrival time ' + leg.arrival_time);
 			console.log('  departure time ' + leg.departure_time);
@@ -34,33 +36,6 @@ function logHodalaTravelAgent (gmapDirectionResult) {
 }
 
 
-function getDirections(map) {
-	console.log('Route button clicked ...');
-	var directionService = new google.maps.DirectionsService();
-	var renderOption = {
-		map: map,
-	}
-
-	var directionsDisplay = new google.maps.DirectionsRenderer(renderOption);
-	for (var pg = 1; pg < Hodala.places.length; ++pg) {
-		var originLatLng = Hodala.places[pg-1].marker.getPosition();
-		var destinLatLng = Hodala.places[pg].marker.getPosition();
-		var request = {
-			origin: originLatLng,
-			destination: destinLatLng,
-			travelMode: google.maps.DirectionsTravelMode.DRIVING,
-		};
-
-		directionService.route(request, function(response, status) {
-			if (status == google.maps.DirectionsStatus.OK) {
-				directionsDisplay.setDirections(response);
-				logHodalaTravelAgent(response);
-			}
-		})
-	}
-}
-
-
 /**
  * Call Google direction service api to make routes
  * Based on these places user has been clicked.
@@ -68,7 +43,7 @@ function getDirections(map) {
  * @param googleMap the map object of the whole application
  * @return nothing
  */
-function getDirections2(googleMap) {
+function getDirections(googleMap) {
 	if (Hodala.places.length < 2) {
 		return;
 	}
@@ -106,10 +81,12 @@ function getDirections2(googleMap) {
 		optimizeWaypoints: true,
 		travelMode: google.maps.DirectionsTravelMode.DRIVING,
 	};
-	directionService.route(req, function(response, status) {
+	directionService.route(req, function(directionResult, status) {
 		if (status == google.maps.DirectionsStatus.OK) {
-			directionsDisplay.setDirections(response);
-			logHodalaTravelAgent(response);
+			directionsDisplay.setDirections(directionResult);
+			//logHodalaTravelAgent(directionResult);
+			var result = new GoogleDirectionResult(directionResult);
+			result.poiSearch();
 		}
 	});
 
