@@ -1,11 +1,29 @@
-// This global object is used to handle the out most functionality or event
+// Copy right. 2012 - 2013 Brian Pin
+//
+// This file contains function for basic marker creation and PlaceGroup
+// creation. There are several operations for the marker and PlaceGroup
+// Add/Remove/Drag. Also when user is just starting the application,
+// This webapp will reload marker information that was used last time.
+// In other words, it has the ability of memorization
+//
+
+/** Hodala is a global factory and aux. function helper.
+ * Anything that does belong to this app and doesn't look like it belongs
+ * to anything specific. Then it is here. Using this object to work
+ */
 var Hodala = {
+	// Point of interests. There is a type of place that will be sought for.
+	// This is the main parameter type for Google place API
 	poiType: "cafe",
-	// Google map object
+
+	// The unique Google Map API object
 	map: undefined,
 
 	// Internal collection to maintain a set of objects
 	places : new Array(),
+
+	// Found places by Google Place Search
+	found : new Array(),
 
 	// Add a place into places array
 	add : function(placeGroup) {
@@ -32,7 +50,7 @@ var Hodala = {
 
 	// Use google map marker to bind to a place group
 	createPlaceGroup : function(marker, map) {
-		if (Hodala.places.length >= 8) {
+		if (Hodala.places.length >= 2) {
 			console.log("Maximum waypoint exceeded");
 			marker.setMap(null);
 			return;
@@ -108,6 +126,8 @@ var Hodala = {
         req.send(null);
 	},
 
+	// A set of helper routines that calls Google API service for 
+	// some small tasks
 	GMapHelper : {
 		setCenter : function(address, mapObject) {
 			var geo = new google.maps.Geocoder();
@@ -123,6 +143,8 @@ var Hodala = {
 		},
 	},
 
+	// Helper function for encoding objects into JSON
+	// Used in AJAX call
 	encodedFormData : function (data) {
 		if (!data) return;
 		var pairs = [];
@@ -138,7 +160,10 @@ var Hodala = {
 }
 
 /**
- * A place group is a class the encapsulates Google map marker
+ * The _PlaceGroup class is a wrapper to contain: Google Map Markers,
+ *  decorative informations, and closely/directly linked to its HTML
+ *  portion. Whether we want to make it a draggable object or not, it
+ *  is useful for stroing information in this object here.
  */
 function _PlaceGroup(marker, map) {
 	this.marker = marker;

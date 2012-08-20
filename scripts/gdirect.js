@@ -1,4 +1,7 @@
-
+//
+// This file is for classes and functions working on Google direction service
+// To ask/create/retrieve a path from Google.
+//
 function logHodalaTravelAgent (gmapDirectionResult) {
 	for (var i = 0; i < gmapDirectionResult.routes.length; ++i) {
 		console.log('Route ' + (i+1) + ": ");
@@ -86,7 +89,7 @@ function getDirections(googleMap) {
 			directionsDisplay.setDirections(directionResult);
 			//logHodalaTravelAgent(directionResult);
 			var result = new GoogleDirectionResult(directionResult);
-			result.poiSearch();
+			result.getPlaceByType();
 		}
 	});
 
