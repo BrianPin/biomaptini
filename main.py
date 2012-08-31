@@ -10,11 +10,15 @@ class MainPage(webapp2.RequestHandler):
 	def get(self):
 		user = users.get_current_user()
 		if user:
-			greeting = ("Welcome, %s! Click to place markers; Double click squares to delete markers"%
-				(user.nickname()))
+			greeting = ("Welcome, %s! Click to place markers; \
+						Double click squares to delete markers"% \
+						(user.nickname()))
 		else:
-			greeting = "Welcome stranger"
+			greeting = ("Welcome to biomaptini, \
+						Click one place to generate marker or \
+						type in address and then confirm!")
 
+		greeting += "<br /> contact: shaohuang at gmail dot com"
 		jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(os.path.dirname(__file__)))
 		template_val = {
 			'greetings' : greeting,
