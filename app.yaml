@@ -13,7 +13,6 @@ handlers:
   script: events.py
 - url: /.*
   script: main.py
-  login: required
 
 libraries:
 - name: jinja2
