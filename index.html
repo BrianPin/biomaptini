@@ -18,13 +18,13 @@
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         var map = new google.maps.Map(document.getElementById("mapplace"),myOptions);
-	      Hodala.GMapHelper.setCenter("Cupertino, CA", map);
+	      Hodala.GMapHelper.setCenter("Mountain View, CA", map);
 	      Hodala.onApplicationLoad(map);
         /* When user clicks the map, generate a new marker!
          */
         google.maps.event.addListener(map, 'click', function(event) {
-          var marker = Hodala.GMapHelper.setMarker(map, event.latLng);
-          Hodala.createPlaceGroup(marker);
+          var marker = new google.maps.Marker({'position': event.latLng, 'map': map});
+          Hodala.createPlaceGroup(marker, map);
         });
       }
     </script>
@@ -35,24 +35,32 @@
     </header>
     <section id="main_body">
       <div id="mapplace"> </div>
+      <div id="placeResult">
+      </div>
       <div id="control_area">
         <button class="control_item" id="route_button" onclick="getDirections(Hodala.map);">route</button>
         <button class="control_item" id="clear_route" onclick="cleanRoute(Hodala.map);">de-route</button>
-        <button class="control_item" id="clear_marker" onclick="clearMarker(Hodala.map);">remove all</button>
-        <select class="control_item" style="font-size: 18px" id="poi_type" onchange="setSelectedType()">
-          <option>cafe</option>
+        <button class="control_item" id="clear_marker" onclick="clearResult(Hodala.map);">remove results</button>
+        <select class="control_item" style="font-size: 12px" id="poi_type" onchange="setSelectedType()">
+          <option>lodging</option>
           <option>atm</option>
           <option>bank</option>
           <option>bus_station</option>
-          <option>airport</option>
-          <option>car_repair</option>
           <option>food</option>
+          <option>car_repair</option>
+          <option>cafe</option>
           <option>gym</option>
         </select>
+        <select class="control_item" style="font-size: 11px" id="check_type" onchange="setDisplayType()">
+          <option>show found</option>
+          <option>show all</option>
+        </select>
+        <input class="control_item" style="text-align: left; width: 440px" id="startTextField" type="text" size="40" placeholder="Starting place">
+        <button class="control_item" id="getStartInput" onclick="getStartAddr();">confirm start</button>
+        <input class="control_item" style="text-align: left; width: 440px" id="endTextField" type="text" size="40" placeholder="Ending place">
+        <button class="control_item" id="getEndInput" onclick="getEndAddr();">confirm end</button>
       </div>
-      <div id="marker_area" style="padding-left: 0px; overflow: auto;">
-        <!-- Place where draggables in   -->
-      </div>
+      <div id="marker_area" style="padding-left: 0px; overflow: auto;"></div>
     </section>
     <footer>
       <div id="footline">
