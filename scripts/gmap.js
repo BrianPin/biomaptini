@@ -14,7 +14,12 @@
 var Hodala = {
 	// Point of interests. There is a type of place that will be sought for.
 	// This is the main parameter type for Google place API
-	poiType: "cafe",
+	poiType: "food",
+
+	// Check type: 
+	// overview: display GPlace search points
+	// found: display found GPlace results only
+	chkType: "show found",
 
 	// The unique Google Map API object
 	map: undefined,
@@ -32,6 +37,7 @@ var Hodala = {
 
 	// Remove a place from places array
 	remove : function(labelElement) {
+		var newA = new Array();
 		for (var index = 0; index < this.places.length; index ++) {
 			var place = this.places[index];
 			// is === an overkill? isn't == enough?
@@ -41,17 +47,19 @@ var Hodala = {
 				place.removeFromBigTable();
 				place.removeElement();
 				place.marker.setMap(null);
-				place.circle.setMap(null);
+				//place.circle.setMap(null);
 				delete this.places[index];
-				break;
+				continue;
 			}
+			newA.push(place);
 		}
+		this.places = newA;
 	},
 
 	// Use google map marker to bind to a place group
 	createPlaceGroup : function(marker, map) {
 		if (Hodala.places.length >= 2) {
-			console.log("Maximum waypoint exceeded");
+			console.log("Hodala max marker number exceeded");
 			marker.setMap(null);
 			return;
 		}
@@ -66,7 +74,7 @@ var Hodala = {
 		google.maps.event.addListener(marker, 'dragend', function() {
 			place.updatePosition();
 		});
-		place.circle = PlaceCircle(map, marker.getPosition(), 100);
+		//place.circle = PlaceCircle(map, marker.getPosition(), 100);
 	},
 
     // Retrieve data from server side database
@@ -124,7 +132,31 @@ var Hodala = {
 			}
         };
         req.send(null);
+
+        // Create autocomple objects
+        var defaultBounds = new google.maps.LatLngBounds(
+        	mapObj.getBounds());
+        var startTag = document.getElementById('startTextField');
+        var endTag = document.getElementById('endTextField');
+        var autoCompleteOptions = {
+        	bounds: defaultBounds,
+        	types: ['establishment', 'geocode'],
+        };
+        this.startAutoComplete = new google.maps.places.Autocomplete(startTag, autoCompleteOptions);
+        this.endAutoComplete = new google.maps.places.Autocomplete(endTag, autoCompleteOptions);
 	},
+
+	// All Google map overlays and objects should be recycled
+	recycle : new Array(),
+
+	// Direction renderer object
+	directionDisplay : null,
+
+	// A GoogleDirectionResult class storage
+	directionResult : null,
+
+	// A progress marker
+	progressMarker : null,
 
 	// A set of helper routines that calls Google API service for 
 	// some small tasks
@@ -139,7 +171,9 @@ var Hodala = {
 		},
 
 		setMarker : function(mapObject, latlng) {
-			return new google.maps.Marker({'position': latlng, 'map': mapObject});
+			var m = new google.maps.Marker({'position': latlng, 'map': mapObject});
+			Hodala.recycle.push(m);
+			return m;
 		},
 	},
 

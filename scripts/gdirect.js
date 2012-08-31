@@ -50,12 +50,13 @@ function getDirections(googleMap) {
 	if (Hodala.places.length < 2) {
 		return;
 	}
+
 	console.log('Route button clicked ...');
 	// If there are more than two places, the middle ones
 	// are going to be way points. 
 	// TODO: make algorithms to choose better origin, destination and
 	// way points
-	var wayLocs = [];
+	var wayLocs = new Array();
 	for (var i = 0; i < Hodala.places.length; ++i) {
 		if (i == 0) {
 			var startLoc = Hodala.places[i].marker.getPosition();
@@ -71,7 +72,7 @@ function getDirections(googleMap) {
 
 		wayLocs.push({
 			location: Hodala.places[i].marker.getPosition(),
-			stopover: true
+			stopover: true,
 		})
 	}
 	var directionService = new google.maps.DirectionsService();
@@ -89,28 +90,97 @@ function getDirections(googleMap) {
 			directionsDisplay.setDirections(directionResult);
 			//logHodalaTravelAgent(directionResult);
 			var result = new GoogleDirectionResult(directionResult);
-			result.getPlaceByType();
+			Hodala.directionResult = result;
+			if (Hodala.chkType === "show all") {
+				result.exploreOverview();
+				//result.exploreLegs();
+			} else {
+				result.getAllPlaceByType();
+			}
 		}
 	});
 
+	Hodala.directionsDisplay = directionsDisplay;
 }
 
 function cleanRoute(googleMap) {
-	console.log('clear route clicked!');
-	var directionsDisplay = new google.maps.DirectionsRenderer({
-		map: googleMap,
-		suppressMarkers: true,
-		suppressPolylines: true,
-	});
-	directionsDisplay.setMap(null);
+	if (Hodala.directionsDisplay != null) {
+		Hodala.directionsDisplay.setMap(null);
+		Hodala.directionResult = null;
+	}
 }
 
-function clearMarker(googleMap) {
-	for (var i = 0; i < Hodala.places.length; ++i) {
-		if (Hodala.places[i]) {
-			Hodala.remove(Hodala.places[i].label);
+function clearResult(googleMap) {
+	// remove google markers
+	for (var i = Hodala.recycle.length - 1; i >= 0; i--) {
+		Hodala.recycle[i].setMap(null);
+	};
+
+	// remove element child information
+	var container = document.getElementById("placeResult");
+	if (container.hasChildNodes()) {
+		while (container.childNodes.length > 0) {
+			container.removeChild(container.firstChild);
 		}
 	}
-	Hodala.places.length = 0;
+
+	// remove place ids
+	Hodala.found.length = 0;
 }
 
+function getStartAddr() {
+	var startAddr = document.getElementById('startTextField').value;
+	var geo = new google.maps.Geocoder();
+
+	geo.geocode({'address': startAddr}, function (results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			if (Hodala.places[0]) {
+				Hodala.places[0].marker.setPosition(results[0].geometry.location);
+			} else {
+				var marker = new google.maps.Marker({'position': results[0].geometry.location, 'map': Hodala.map});
+				Hodala.createPlaceGroup(marker, Hodala.map);
+			}
+
+			if (Hodala.places[0] && !Hodala.places[1]) {
+				Hodala.map.setCenter(Hodala.places[0].marker.getPosition());
+			}
+			/* else {
+				var bound = new google.maps.LatLngBounds({
+					sw: Hodala.places[0].marker.getPosition(),
+					ne: Hodala.places[1].marker.getPosition(),
+				});
+				Hodala.map.fitBounds(bound);
+			} */
+		}
+	});
+
+}
+
+function getEndAddr() {
+	var endAddr = document.getElementById('endTextField').value;
+	var geo = new google.maps.Geocoder();
+
+	geo.geocode({'address': endAddr}, function (results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			if (Hodala.places[1]) {
+				Hodala.places[1].marker.setPosition(results[0].geometry.location);
+			} else {
+				var marker = new google.maps.Marker({'position': results[0].geometry.location, 'map': Hodala.map});
+				Hodala.createPlaceGroup(marker, Hodala.map);
+			}
+
+			if (!Hodala.places[0] && Hodala.places[1]) {
+				Hodala.map.setCenter(Hodala.places[1].marker.getPosition());
+			}
+			/* 
+			else {
+				var bound = new google.maps.LatLngBounds({
+					sw: Hodala.places[0].marker.getPosition(),
+					ne: Hodala.places[1].marker.getPosition(),
+				});
+				Hodala.map.fitBounds(bound);
+			}*/
+
+		}
+	});
+}
